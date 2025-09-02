@@ -225,9 +225,14 @@
 
         peer.on('connection', (connection) => {
             conn = connection;
-            setupConnection();
-            updateStatus('connected');
             console.log('Incoming connection from:', connection.peer);
+            
+            // Wait for the connection to be fully established
+            conn.on('open', () => {
+                setupConnection();
+                updateStatus('connected');
+                console.log('Incoming connection established');
+            });
         });
 
         peer.on('error', (err) => {
